@@ -33,11 +33,12 @@ public class FileProcessor implements Runnable {
 
         try {
             while (!isFileReadCompleted.getValue() || (isFileReadCompleted.getValue() && !linesBLQueue.isEmpty())) {
-//                String lineToProcess = linesBLQueue.take();
+//                Touraj :: [Would be better :] to use also Poison Pill Shutdown
+                String lineToProcess = linesBLQueue.take();
 
                 //My bad ! I should not used Poll because with Delay in Producer threads I may get NullPointerExption
                 // Better way is using Take + poison Pill Shutdown (sending Sentinel Value to Consumer to force them shutdown)
-                String lineToProcess = linesBLQueue.poll(2000, TimeUnit.MILLISECONDS);
+//                String lineToProcess = linesBLQueue.poll(2000, TimeUnit.MILLISECONDS);
 
                 //[Touraj] :: Following is a work around
                 // It is not neccessary to be done when using take() + poison pill shutdown technique.
